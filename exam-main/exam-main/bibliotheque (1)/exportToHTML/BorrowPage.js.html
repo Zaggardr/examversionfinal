@@ -1,0 +1,162 @@
+<html>
+<head>
+<title>BorrowPage.js</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #7a7e85;}
+.s5 { color: #2aacb8;}
+.s6 { color: #d5b778;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+BorrowPage.js</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">React</span><span class="s2">, { </span><span class="s1">useState </span><span class="s2">} </span><span class="s1">from </span><span class="s3">&quot;react&quot;</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">axios from </span><span class="s3">&quot;axios&quot;</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s2">{ </span><span class="s1">useNavigate </span><span class="s2">} </span><span class="s1">from </span><span class="s3">&quot;react-router-dom&quot;</span><span class="s2">;</span>
+
+<span class="s0">const </span><span class="s1">BorrowPage </span><span class="s2">= () =&gt; {</span>
+    <span class="s0">const </span><span class="s1">navigate </span><span class="s2">= </span><span class="s1">useNavigate</span><span class="s2">();</span>
+
+    <span class="s0">const </span><span class="s2">[</span><span class="s1">borrow</span><span class="s2">, </span><span class="s1">setBorrow</span><span class="s2">] = </span><span class="s1">useState</span><span class="s2">({</span>
+        <span class="s1">bookTitle</span><span class="s2">: </span><span class="s3">&quot;&quot;</span><span class="s2">,</span>
+        <span class="s1">borrowerName</span><span class="s2">: </span><span class="s3">&quot;&quot;</span><span class="s2">,</span>
+        <span class="s1">returnDate</span><span class="s2">: </span><span class="s3">&quot;&quot;</span><span class="s2">,</span>
+        <span class="s1">bookId</span><span class="s2">: </span><span class="s0">null</span><span class="s2">,  </span><span class="s4">// L'ID du livre sera ajouté après la recherche par titre</span>
+    <span class="s2">});</span>
+
+    <span class="s0">const </span><span class="s2">[</span><span class="s1">bookFound</span><span class="s2">, </span><span class="s1">setBookFound</span><span class="s2">] = </span><span class="s1">useState</span><span class="s2">(</span><span class="s0">true</span><span class="s2">); </span><span class="s4">// Pour gérer l'état de recherche du livre</span>
+
+    <span class="s4">// Gestion des changements dans le formulaire</span>
+    <span class="s0">const </span><span class="s1">handleChange </span><span class="s2">= (</span><span class="s1">e</span><span class="s2">) =&gt; {</span>
+        <span class="s0">const </span><span class="s2">{ </span><span class="s1">name</span><span class="s2">, </span><span class="s1">value </span><span class="s2">} = </span><span class="s1">e</span><span class="s2">.</span><span class="s1">target</span><span class="s2">;</span>
+        <span class="s1">setBorrow</span><span class="s2">({ </span><span class="s1">...borrow</span><span class="s2">, [</span><span class="s1">name</span><span class="s2">]: </span><span class="s1">value </span><span class="s2">});</span>
+    <span class="s2">};</span>
+
+    <span class="s4">// Fonction pour rechercher le livre par titre</span>
+    <span class="s0">const </span><span class="s1">handleSearchBook </span><span class="s2">= </span><span class="s1">async </span><span class="s2">() =&gt; {</span>
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s0">const </span><span class="s1">response </span><span class="s2">= </span><span class="s0">await </span><span class="s1">axios</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s3">&quot;http://localhost:8080/api/books/search&quot;</span><span class="s2">, {</span>
+                <span class="s1">params</span><span class="s2">: { </span><span class="s1">title</span><span class="s2">: </span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">bookTitle </span><span class="s2">},</span>
+            <span class="s2">});</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">response</span><span class="s2">.</span><span class="s1">data </span><span class="s2">&amp;&amp; </span><span class="s1">response</span><span class="s2">.</span><span class="s1">data</span><span class="s2">.</span><span class="s1">length </span><span class="s2">&gt; </span><span class="s5">0</span><span class="s2">) {</span>
+                <span class="s0">const </span><span class="s1">foundBook </span><span class="s2">= </span><span class="s1">response</span><span class="s2">.</span><span class="s1">data</span><span class="s2">[</span><span class="s5">0</span><span class="s2">];</span>
+                <span class="s1">setBorrow</span><span class="s2">({ </span><span class="s1">...borrow</span><span class="s2">, </span><span class="s1">bookId</span><span class="s2">: </span><span class="s1">foundBook</span><span class="s2">.</span><span class="s1">id </span><span class="s2">});</span>
+
+                <span class="s4">// Vérifier si le livre est déjà emprunté</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">foundBook</span><span class="s2">.</span><span class="s1">isBorrowed</span><span class="s2">) {</span>
+                    <span class="s1">setBookFound</span><span class="s2">(</span><span class="s0">false</span><span class="s2">);  </span><span class="s4">// Le livre est déjà emprunté</span>
+                    <span class="s1">alert</span><span class="s2">(</span><span class="s3">&quot;Ce livre est déjà emprunté.&quot;</span><span class="s2">);</span>
+                <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                    <span class="s1">setBookFound</span><span class="s2">(</span><span class="s0">true</span><span class="s2">);</span>
+                <span class="s2">}</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">setBookFound</span><span class="s2">(</span><span class="s0">false</span><span class="s2">); </span><span class="s4">// Aucun livre trouvé</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">error</span><span class="s2">) {</span>
+            <span class="s1">console</span><span class="s2">.</span><span class="s1">error</span><span class="s2">(</span><span class="s3">&quot;Erreur lors de la recherche du livre&quot;</span><span class="s2">, </span><span class="s1">error</span><span class="s2">);</span>
+            <span class="s1">setBookFound</span><span class="s2">(</span><span class="s0">false</span><span class="s2">); </span><span class="s4">// En cas d'erreur, traiter comme si aucun livre n'était trouvé</span>
+        <span class="s2">}</span>
+    <span class="s2">};</span>
+
+
+    <span class="s4">// Fonction pour enregistrer l'emprunt</span>
+    <span class="s0">const </span><span class="s1">handleSubmit </span><span class="s2">= </span><span class="s1">async </span><span class="s2">(</span><span class="s1">e</span><span class="s2">) =&gt; {</span>
+        <span class="s1">e</span><span class="s2">.</span><span class="s1">preventDefault</span><span class="s2">();</span>
+
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">bookId</span><span class="s2">) {</span>
+            <span class="s1">alert</span><span class="s2">(</span><span class="s3">&quot;Veuillez d'abord rechercher un livre valide.&quot;</span><span class="s2">);</span>
+            <span class="s0">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s0">const </span><span class="s1">response </span><span class="s2">= </span><span class="s0">await </span><span class="s1">axios</span><span class="s2">.</span><span class="s1">post</span><span class="s2">(</span><span class="s3">&quot;http://localhost:8080/api/borrows&quot;</span><span class="s2">, {</span>
+                <span class="s1">bookId</span><span class="s2">: </span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">bookId</span><span class="s2">,</span>
+                <span class="s1">borrowerName</span><span class="s2">: </span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">borrowerName</span><span class="s2">,</span>
+                <span class="s1">returnDate</span><span class="s2">: </span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">returnDate</span><span class="s2">,</span>
+            <span class="s2">});</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">response</span><span class="s2">.</span><span class="s1">status </span><span class="s2">=== </span><span class="s5">400</span><span class="s2">) {</span>
+                <span class="s1">alert</span><span class="s2">(</span><span class="s1">response</span><span class="s2">.</span><span class="s1">data</span><span class="s2">); </span><span class="s4">// Affiche le message d'erreur &quot;Le livre est déjà emprunté.&quot;</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">alert</span><span class="s2">(</span><span class="s3">&quot;Emprunt enregistré avec succès !&quot;</span><span class="s2">);</span>
+                <span class="s1">navigate</span><span class="s2">(</span><span class="s3">&quot;/&quot;</span><span class="s2">); </span><span class="s4">// Retourner à la page d'accueil</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">error</span><span class="s2">) {</span>
+            <span class="s1">console</span><span class="s2">.</span><span class="s1">error</span><span class="s2">(</span><span class="s3">&quot;Erreur lors de l'enregistrement de l'emprunt&quot;</span><span class="s2">, </span><span class="s1">error</span><span class="s2">);</span>
+            <span class="s1">alert</span><span class="s2">(</span><span class="s3">&quot;Une erreur est survenue, veuillez réessayer.&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">};</span>
+
+
+
+    <span class="s0">return </span><span class="s2">(</span>
+        <span class="s6">&lt;div </span><span class="s2">className</span><span class="s3">=&quot;borrow-page&quot;</span><span class="s6">&gt;</span>
+            <span class="s6">&lt;h2&gt;</span><span class="s1">Enregistrer un emprunt</span><span class="s6">&lt;/h2&gt;</span>
+            <span class="s6">&lt;form </span><span class="s2">onSubmit</span><span class="s3">=</span><span class="s2">{</span><span class="s1">handleSubmit</span><span class="s2">}</span><span class="s6">&gt;</span>
+                <span class="s2">{</span><span class="s4">/* Recherche par titre de livre */</span><span class="s2">}</span>
+                <span class="s6">&lt;div&gt;</span>
+                    <span class="s6">&lt;label&gt;</span><span class="s1">Titre du Livre :</span><span class="s6">&lt;/label&gt;</span>
+                    <span class="s6">&lt;input</span>
+                        <span class="s2">type</span><span class="s3">=&quot;text&quot;</span>
+                        <span class="s2">name</span><span class="s3">=&quot;bookTitle&quot;</span>
+                        <span class="s2">value</span><span class="s3">=</span><span class="s2">{</span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">bookTitle</span><span class="s2">}</span>
+                        <span class="s2">onChange</span><span class="s3">=</span><span class="s2">{</span><span class="s1">handleChange</span><span class="s2">}</span>
+                        <span class="s2">placeholder</span><span class="s3">=&quot;Entrez le titre du livre&quot;</span>
+                        <span class="s2">required</span>
+                    <span class="s6">/&gt;</span>
+                    <span class="s6">&lt;button </span><span class="s2">type</span><span class="s3">=&quot;button&quot; </span><span class="s2">onClick</span><span class="s3">=</span><span class="s2">{</span><span class="s1">handleSearchBook</span><span class="s2">}</span><span class="s6">&gt;</span><span class="s1">Rechercher</span><span class="s6">&lt;/button&gt;</span>
+                <span class="s6">&lt;/div&gt;</span>
+
+                <span class="s2">{</span><span class="s4">/* Affichage de l'ID du livre si trouvé */</span><span class="s2">}</span>
+                <span class="s2">{!</span><span class="s1">bookFound </span><span class="s2">&amp;&amp; </span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">bookTitle </span><span class="s2">&amp;&amp; (</span>
+                    <span class="s6">&lt;p&gt;</span><span class="s1">Aucun livre trouvé avec ce titre.</span><span class="s6">&lt;/p&gt;</span>
+                <span class="s2">)}</span>
+
+                <span class="s2">{</span><span class="s1">bookFound </span><span class="s2">&amp;&amp; </span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">bookTitle </span><span class="s2">&amp;&amp; </span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">bookId </span><span class="s2">&amp;&amp; (</span>
+                    <span class="s6">&lt;p&gt;</span><span class="s1">Livre trouvé : </span><span class="s2">{</span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">bookTitle</span><span class="s2">}</span><span class="s6">&lt;/p&gt;</span>
+                <span class="s2">)}</span>
+
+                <span class="s2">{</span><span class="s4">/* Nom de l'emprunteur */</span><span class="s2">}</span>
+                <span class="s6">&lt;div&gt;</span>
+                    <span class="s6">&lt;label&gt;</span><span class="s1">Nom de l'emprunteur :</span><span class="s6">&lt;/label&gt;</span>
+                    <span class="s6">&lt;input</span>
+                        <span class="s2">type</span><span class="s3">=&quot;text&quot;</span>
+                        <span class="s2">name</span><span class="s3">=&quot;borrowerName&quot;</span>
+                        <span class="s2">value</span><span class="s3">=</span><span class="s2">{</span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">borrowerName</span><span class="s2">}</span>
+                        <span class="s2">onChange</span><span class="s3">=</span><span class="s2">{</span><span class="s1">handleChange</span><span class="s2">}</span>
+                        <span class="s2">placeholder</span><span class="s3">=&quot;Entrez le nom de l'emprunteur&quot;</span>
+                        <span class="s2">required</span>
+                    <span class="s6">/&gt;</span>
+                <span class="s6">&lt;/div&gt;</span>
+
+                <span class="s2">{</span><span class="s4">/* Date de retour */</span><span class="s2">}</span>
+                <span class="s6">&lt;div&gt;</span>
+                    <span class="s6">&lt;label&gt;</span><span class="s1">Date de retour prévue :</span><span class="s6">&lt;/label&gt;</span>
+                    <span class="s6">&lt;input</span>
+                        <span class="s2">type</span><span class="s3">=&quot;date&quot;</span>
+                        <span class="s2">name</span><span class="s3">=&quot;returnDate&quot;</span>
+                        <span class="s2">value</span><span class="s3">=</span><span class="s2">{</span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">returnDate</span><span class="s2">}</span>
+                        <span class="s2">onChange</span><span class="s3">=</span><span class="s2">{</span><span class="s1">handleChange</span><span class="s2">}</span>
+                        <span class="s2">required</span>
+                    <span class="s6">/&gt;</span>
+                <span class="s6">&lt;/div&gt;</span>
+
+                <span class="s6">&lt;button </span><span class="s2">type</span><span class="s3">=&quot;submit&quot; </span><span class="s2">disabled</span><span class="s3">=</span><span class="s2">{!</span><span class="s1">borrow</span><span class="s2">.</span><span class="s1">bookId</span><span class="s2">}</span><span class="s6">&gt;</span><span class="s1">Enregistrer</span><span class="s6">&lt;/button&gt;</span>
+            <span class="s6">&lt;/form&gt;</span>
+        <span class="s6">&lt;/div&gt;</span>
+    <span class="s2">);</span>
+<span class="s2">};</span>
+
+<span class="s0">export default </span><span class="s1">BorrowPage</span><span class="s2">;</span>
+</pre>
+</body>
+</html>

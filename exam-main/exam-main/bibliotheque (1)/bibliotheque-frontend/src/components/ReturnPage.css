@@ -1,0 +1,59 @@
+/* Style global de la page */
+.return-page {
+    font-family: 'Arial', sans-serif;
+    background: url('http://localhost:8080/images/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    color: #2C3E50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Fond blanc avec transparence pour contraster le fond */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #5D4037; /* Couleur du texte en rapport avec le thème bibliothèque */
+}
+
+.input-container {
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+button.return-btn {
+    padding: 10px 20px;
+    background-color: #8E44AD; /* Couleur violet/bibliothèque */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button.return-btn:hover {
+    background-color: #7D3C98;
+}
+
+p {
+    margin-top: 20px;
+    color: #27AE60; /* Couleur verte pour le message de succès */
+    font-size: 18px;
+}

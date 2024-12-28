@@ -1,0 +1,134 @@
+.admin-dashboard {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5dc; /* Beige */
+    color: #003366; /* Bleu marine */
+    padding: 20px;
+    max-width: 900px;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+    background-color: #003366; /* Bleu marine */
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.navbar-list {
+    list-style-type: none;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar-list a {
+    color: #f5f5dc; /* Beige */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar-list a:hover {
+    text-decoration: underline;
+}
+
+.dashboard-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #003366;
+}
+
+/* Statistiques */
+.stats-section {
+    padding: 15px;
+    background-color: #e6e6fa; /* Bleu clair */
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.stats-section h3 {
+    font-size: 18px;
+    color: #003366;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #003366;
+    padding-bottom: 5px;
+}
+
+/* Tableau des statistiques */
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.stats-table th, .stats-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.stats-table th {
+    background-color: #003366;
+    color: #f5f5dc; /* Beige */
+}
+
+.stats-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.stats-table tbody tr:nth-child(odd) {
+    background-color: #e6e6fa; /* Bleu clair */
+}
+
+/* Formulaire de notification */
+.notification-form {
+    padding: 15px;
+    background-color: #e6e6fa;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.send-btn {
+    background-color: #003366;
+    color: #f5f5dc;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.send-btn:hover {
+    background-color: #002244;
+}
+
+.response {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: green;
+}
+
+.loading {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
